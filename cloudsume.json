@@ -1,0 +1,26 @@
+{
+  "data": [
+    "name",
+    "email",
+    "mobile",
+    "address",
+    "github",
+    "experience",
+    "education",
+    "skill",
+    "language"
+  ],
+  "options": {
+    "experience": {
+      "descriptionParagraph": "\\vskip 0pt\\medskip{}",
+      "descriptionListOptions": "noitemsep,topsep=0pt,after=\\medskip"
+    },
+    "education": {
+      "descriptionParagraph": "\\vskip 0pt\\medskip{}",
+      "descriptionListOptions": "noitemsep,topsep=0pt,after=\\medskip"
+    },
+    "skill": {
+      "grouping": 1
+    }
+  }
+}

@@ -1,0 +1,105 @@
+resume(data) ::= <<
+\documentclass[letterpaper]{resume-knyte}
+
+\usepackage{enumitem}
+
+\begin{document}
+
+%%%%%%%%%
+% HEADER
+%%%%%%%%%
+
+% \makeheader{title/name}
+<name(data.name)>
+
+%%%%%%%%%%%%
+% SUBHEADER
+%%%%%%%%%%%%
+
+% argument to environment should match number of sites
+\begin{subheader}{1}
+  % leave third argument empty to specify no hyperlink
+  <email(data.email)>
+  <mobile(data.mobile)>
+  <address(data.address)>
+  <github(data.github)>
+\end{subheader}
+
+%%%%%%%%%%%%%
+% EXPERIENCE
+%%%%%%%%%%%%%
+
+<experiences(data.experience)>
+
+%%%%%%%%%%%%
+% EDUCATION
+%%%%%%%%%%%%
+
+<educations(data.education)>
+
+%%%%%%%%%
+% SKILLS
+%%%%%%%%%
+
+<skills(data.skill)>
+
+%%%%%%%%%%%
+% LANGUAGE
+%%%%%%%%%%%
+
+<languages(data.language)>
+
+\end{document}
+>>
+
+name(v) ::= "<if(v && v.firstName && v.lastName)>\makeheader{<firstName(v)> <v.lastName>}<else>\makeheader{Jane Emily Doe}<endif>"
+firstName(v) ::= "<if(v.middleName)><v.firstName> <v.middleName><else><v.firstName><endif>"
+email(v) ::= "<if(v)>\site{Email}{<v>}{mailto:<v>}<endif>"
+mobile(v) ::= "<if(v)>\site{Mobile}{<v>}{}<endif>"
+address(v) ::= "<if(v)>\site{Address}{<if(v.country)><countryAddr(v)><else><localAddr(v)><endif>}{}<endif>"
+github(v) ::= "<if(v)>\site{GitHub}{<v>}{https://github.com/<v>}<endif>"
+
+experiences(v) ::= <<
+<if(v)>
+\begin{topic}{Experience}
+<v:experience()>
+\end{topic}
+\vskip 0pt\smallskip{}
+<endif>
+>>
+
+educations(v) ::= <<
+<if(v)>
+\begin{topic}{Education}
+<v:education()>
+\end{topic}
+\vskip 0pt\smallskip{}
+<endif>
+>>
+
+skills(v) ::= <<
+<if(v)>
+\begin{topic}{Skills}
+<if(v.expert)>\skillset{Expert}{<v.expert;separator=", ">}<endif>
+<if(v.novice)>\skillset{Basic}{<v.novice;separator=", ">}<endif>
+\end{topic}
+\vskip 0pt\medskip{}
+<endif>
+>>
+
+languages(v) ::= <<
+<if(v)>
+\begin{topic}{Languages}
+<v:language()>
+\end{topic}
+<endif>
+>>
+
+experience(v) ::= "\entry{<v.title>}{<date(v.start)> - <if(v.end)><date(v.end)><else>present<endif>}{<v.company>, <addr(v)>}{<v.description>}"
+education(v) ::= "\entry{<v.institute>}{<date(v.start)> - <if(v.end)><date(v.end)><else>present<endif>}{<degree(v)>}{<v.description>}"
+language(v) ::= "\honor{<v.name>}{<v.proficiency>}"
+date(v) ::= "<if(v)><v.month> <v.year><endif>"
+addr(v) ::= "<if(v.country)><countryAddr(v)><else><localAddr(v)><endif>"
+countryAddr(v) ::= "<if(v.street)><v.street><else><v.region><endif>, <v.country>"
+localAddr(v) ::= "<if(v.street && v.region)><v.street>, <v.region><elseif(v.street)><v.street><else><v.region><endif>"
+degree(v) ::= "<if(v.grade)><v.degree>, <v.grade><else><v.degree><endif>"
